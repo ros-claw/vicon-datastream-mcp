@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "vicon-datastream": {
+      "command": "python",
+      "args": [
+        "-m",
+        "src.mcp_server"
+      ],
+      "transportType": "stdio",
+      "description": "Vicon DataStream MCP Server - 动作捕捉数据流接口",
+      "autoApprove": [],
+      "env": {
+        "PYTHONPATH": ".",
+        "VICON_HOST": "localhost:801"
+      }
+    }
+  }
+}

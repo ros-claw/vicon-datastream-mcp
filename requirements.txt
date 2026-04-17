@@ -1,0 +1,7 @@
+mcp>=1.0.0
+uvicorn>=0.24.0
+starlette>=0.27.0
+
+# Vicon SDK - 需要手动安装:
+# cd "D:\Program Files\Vicon\DataStream SDK\Win64\Python"
+# pip install -e vicon_dssdk
