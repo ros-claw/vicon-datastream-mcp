@@ -1,5 +1,7 @@
 # Vicon DataStream MCP Server
 
+[English](./README.md) | **中文**
+
 [![MCP](https://img.shields.io/badge/MCP-Protocol-blue)](https://modelcontextprotocol.io/)
 [![Python](https://img.shields.io/badge/Python-3.10+-green)](https://www.python.org/)
 [![Vicon](https://img.shields.io/badge/Vicon-Tracker/Nexus/Evoke-orange)](https://www.vicon.com/)
