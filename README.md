@@ -5,111 +5,113 @@
 [![Vicon](https://img.shields.io/badge/Vicon-Tracker/Nexus/Evoke-orange)](https://www.vicon.com/)
 [![SDK](https://img.shields.io/badge/SDK-1.12.145507h-red)](./docs/Vicon%20DataStream%20SDK%20Manual.pdf)
 
-Based on [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) **full-featured** Vicon motion capture data streaming server.
+A **full-featured** Vicon motion capture data streaming server based on [MCP (Model Context Protocol)](https://modelcontextprotocol.io/).
 
-**📚 SDK Reference**: [Vicon DataStream SDK Manual.pdf](./docs/Vicon%20DataStream%20SDK%20Manual.pdf)  
+**📚 SDK Reference**: [Vicon DataStream SDK Manual.pdf](./docs/Vicon%20DataStream%20SDK%20Manual.pdf)
 **📦 Based on SDK**: Vicon DataStream SDK v1.12.145507h (Win64 Python)
 
 **✨ 100% Feature Complete**: Implements all 47+ core functions of Vicon DataStream SDK.
 
----
-
-## 📋 功能特性
-
-### 🔌 连接管理
-- ✅ TCP 直连（端口 801）
-- ✅ Multicast 组播连接（224.0.0.0/4）
-- ✅ Multicast 转发控制
-- ✅ 可配置缓冲区大小
-
-### 🏃 运动学数据（完整）
-- ✅ **全局姿态**：位置 + 4 种旋转格式（欧拉角/四元数/矩阵/**螺旋角**）
-- ✅ **本地姿态**：相对父段变换，4 种旋转格式
-- ✅ **静态偏移**：PRE-POSITION/PRE-ORIENTATION
-- ✅ **段层次结构**：父段、子段、根段
-- ✅ **遮挡状态**：实时标记
-
-### 📍 标记点追踪
-- ✅ Labeled Markers（主体+父段+位置+遮挡）
-- ✅ Unlabeled Markers（原始反射点）
-- ✅ **Marker Ray 追踪**（光线追踪相机分配）
-
-### 📊 生物力学设备
-- ✅ **力板数据**：
-  - 全局坐标：力向量(N)、力矩向量(Nm)、压力中心(mm)
-  - **本地坐标**：相对力板自身坐标系
-  - 模拟通道电压
-- ✅ **眼动仪**：眼睛位置 + 注视向量（含遮挡检测）
-- ✅ **通用设备**：EMG 等，自动识别单位
-
-### 📷 相机与质心
-- ✅ 相机列表（ID、类型、分辨率、显示名称）
-- ✅ 动态相机（可移动相机）
-- ✅ **相机标定参数**：
-  - 全局位姿（平移+4种旋转）
-  - 镜头参数（焦距、主点、畸变系数 k1,k2,k3）
-- ✅ 质心数据（每相机反射点位置+权重）
-
-### ⚙️ 高级配置
-- ✅ 3 种流模式（ClientPull/ClientPullPreFetch/ServerPush）
-- ✅ **主体过滤**（只接收指定主体）
-- ✅ 坐标系映射（6方向自定义，自动识别 Unity/Unreal/ROS）
-- ✅ 延迟分析（总延迟+各阶段分解）
-- ✅ 时间码（时:分:秒:帧）
-- ✅ 无线网络优化（Windows）
+Part of the [ROSClaw](https://github.com/ros-claw) Embodied Intelligence Operating System.
 
 ---
 
-## 📚 文档导航
+## 📋 Features
 
-| 文档 | 说明 |
-|------|------|
-| [📖 Windows 完整安装指南](docs/WINDOWS_SETUP.md) | **Windows 系统详细安装、配置、故障排除** |
-| [⚙️ 配置参考](docs/CONFIG.md) | OpenClaw/Claude Desktop 配置详情 |
-| [🏗️ 架构说明](docs/ARCHITECTURE.md) | 系统架构与技术细节 |
-| [✅ 功能清单](CHECKLIST.md) | 完整功能核对表 |
-| [📄 SDK 开发手册](docs/Vicon%20DataStream%20SDK%20Manual.pdf) | **Vicon DataStream SDK v1.12.145507h 官方 PDF 文档** |
+### 🔌 Connection Management
+- ✅ TCP Direct Connection (Port 801)
+- ✅ Multicast Connection (224.0.0.0/4)
+- ✅ Multicast Forwarding Control
+- ✅ Configurable Buffer Size
 
-### Windows 用户快速入口
+### 🏃 Kinematic Data (Complete)
+- ✅ **Global Pose**: Position + 4 rotation formats (Euler/Quaternion/Matrix/**Helical**)
+- ✅ **Local Pose**: Relative parent segment transform, 4 rotation formats
+- ✅ **Static Offset**: PRE-POSITION/PRE-ORIENTATION
+- ✅ **Segment Hierarchy**: Parent segments, child segments, root segment
+- ✅ **Occlusion Status**: Real-time markers
 
-如果你使用 **Windows** 系统，请查看 **[Windows 完整安装指南](docs/WINDOWS_SETUP.md)**，包含：
-- Vicon SDK 下载与安装步骤
-- SDK 目录结构详细说明
-- OpenClaw 连接配置（含多服务器配置）
-- 端口说明（801/804/8802/7000/51001）
-- 实时数据获取完整教程
-- 故障排除与性能优化
+### 📍 Marker Tracking
+- ✅ Labeled Markers (subject + parent segment + position + occlusion)
+- ✅ Unlabeled Markers (raw reflection points)
+- ✅ **Marker Ray Tracking** (ray-tracing camera assignment)
 
-![Vicon Tracker 设置](docs/images/vicon_tracker.png)
+### 📊 Biomechanical Devices
+- ✅ **Force Plate Data**:
+  - Global coordinates: Force vector (N), Moment vector (Nm), Center of Pressure (mm)
+  - **Local coordinates**: Relative to force plate's own coordinate system
+  - Analog channel voltage
+- ✅ **Eye Tracker**: Eye position + gaze vector (with occlusion detection)
+- ✅ **Generic Devices**: EMG etc., auto-recognized units
+
+### 📷 Cameras and Centroids
+- ✅ Camera list (ID, type, resolution, display name)
+- ✅ Dynamic cameras (movable cameras)
+- ✅ **Camera Calibration Parameters**:
+  - Global pose (translation + 4 rotation types)
+  - Lens parameters (focal length, principal point, distortion coefficients k1,k2,k3)
+- ✅ Centroid data (reflected point position + weight per camera)
+
+### ⚙️ Advanced Configuration
+- ✅ 3 Stream Modes (ClientPull/ClientPullPreFetch/ServerPush)
+- ✅ **Subject Filtering** (receive only specified subjects)
+- ✅ Coordinate System Mapping (6-direction customization, auto-detect Unity/Unreal/ROS)
+- ✅ Latency Analysis (total latency + stage breakdown)
+- ✅ Timecode (hours:minutes:seconds:frames)
+- ✅ Wireless Network Optimization (Windows)
 
 ---
 
-## 🚀 快速开始
+## 📚 Documentation Navigation
 
-### 1. 安装 Vicon SDK
+| Document | Description |
+|----------|-------------|
+| [📖 Windows Setup Guide](docs/WINDOWS_SETUP.md) | **Windows system detailed installation, configuration, troubleshooting** |
+| [⚙️ Configuration Reference](docs/CONFIG.md) | OpenClaw/Claude Desktop configuration details |
+| [🏗️ Architecture](docs/ARCHITECTURE.md) | System architecture and technical details |
+| [✅ Feature Checklist](CHECKLIST.md) | Complete feature checklist |
+| [📄 SDK Developer Manual](docs/Vicon%20DataStream%20SDK%20Manual.pdf) | **Vicon DataStream SDK v1.12.145507h Official PDF Documentation** |
+
+### Windows Users Quick Start
+
+If you use **Windows**, please check the **[Windows Complete Installation Guide](docs/WINDOWS_SETUP.md)**, which includes:
+- Vicon SDK download and installation steps
+- Detailed SDK directory structure
+- OpenClaw connection configuration (including multi-server configuration)
+- Port description (801/804/8802/7000/51001)
+- Real-time data acquisition complete tutorial
+- Troubleshooting and performance optimization
+
+![Vicon Tracker Setup](docs/images/vicon_tracker.png)
+
+---
+
+## 🚀 Quick Start
+
+### 1. Install Vicon SDK
 
 ```powershell
 cd "D:\Program Files\Vicon\DataStream SDK\Win64\Python"
 pip install -e vicon_dssdk
 ```
 
-### 2. 安装 MCP 依赖
+### 2. Install MCP Dependencies
 
 ```bash
 cd vicon-datastream-mcp
 pip install -r requirements.txt
 ```
 
-### 3. 配置 OpenClaw/Claude Desktop
+### 3. Configure OpenClaw/Claude Desktop
 
-编辑配置文件（Windows 路径：`C:\Users\<用户名>\.openclaw\openclaw.json`）：
+Edit the configuration file (Windows path: `C:\Users\<username>\.openclaw\openclaw.json`):
 
 ```json
 {
   "mcpServers": {
     "vicon": {
       "command": "python",
-      "args": ["D:/workspace/rosclaw/mcp/vicon-datastream-mcp/vicon_datastream_mcp.py"],
+      "args": ["D:/workspace/rosclaw/mcp/vicon-datastream-mcp/src/mcp_server.py"],
       "env": {
         "VICON_HOST": "192.168.20.24:801"
       }
@@ -118,185 +120,185 @@ pip install -r requirements.txt
 }
 ```
 
-**端口选择参考**：
-| 端口 | 适用场景 | 延迟 |
-|------|----------|------|
-| **801** | DataStream Live/Offline（推荐） | 标准 |
-| **804** | DataStream Low Latency | 更低 |
-| **8802** | DataStream Live（旧版兼容） | 标准 |
+**Port Selection Reference**:
+| Port | Use Case | Latency |
+|------|----------|---------|
+| **801** | DataStream Live/Offline (Recommended) | Standard |
+| **804** | DataStream Low Latency | Lower |
+| **8802** | DataStream Live (Legacy Compatibility) | Standard |
 
-> 💡 **提示**: 如果使用端口 801 连接失败，尝试 804 或 8802
+> 💡 **Tip**: If port 801 connection fails, try 804 or 8802
 
-详细配置说明见 [Windows 安装指南](docs/WINDOWS_SETUP.md)
+Detailed configuration instructions can be found in the [Windows Setup Guide](docs/WINDOWS_SETUP.md)
 
-### 4. 运行
+### 4. Run
 
 ```bash
-# stdio 模式（默认）
-python vicon_datastream_mcp.py
+# stdio mode (default)
+python -m src.mcp_server
 
-# SSE 模式
-python vicon_datastream_mcp.py --transport sse --port 8000
+# SSE mode
+python -m src.mcp_server --transport sse --port 8000
 ```
 
 ---
 
-## 💬 自然语言示例
+## 💬 Natural Language Examples
 
-### 连接和配置
+### Connection and Configuration
 ```
-"连接到 Vicon 系统" 
+"Connect to Vicon system"
 → vicon_connect(host="localhost:801")
 
-"通过组播连接，使用本地 IP 192.168.1.100"
+"Connect via multicast using local IP 192.168.1.100"
 → vicon_connect_multicast(local_ip="192.168.1.100")
 
-"开启低延迟推送模式"
+"Enable low latency push mode"
 → vicon_set_stream_mode("ServerPush")
 
-"设置 Unity 坐标系（Y-up）"
+"Set Unity coordinate system (Y-up)"
 → vicon_set_axis_mapping("Forward", "Up", "Right")
 
-"只接收 Colin 的数据"
+"Only receive Colin's data"
 → vicon_clear_subject_filter() + vicon_add_subject_filter("Colin")
 ```
 
-### 获取运动学数据
+### Get Kinematic Data
 ```
-"获取 Colin 的骨盆完整姿态"
+"Get Colin's pelvis complete pose"
 → vicon_get_segment(subject_name="Colin", segment_name="Pelvis")
-返回: 全局/本地/静态变换，每种包含 Euler/Quaternion/Matrix/Helical
+Returns: Global/Local/Static transforms, each containing Euler/Quaternion/Matrix/Helical
 
-"获取所有段的层次结构"
+"Get all segments hierarchy"
 → vicon_get_all_segments("Colin")
 
-"获取标记点 LPSI 的光线追踪信息"
+"Get marker LPSI ray tracing information"
 → vicon_get_markers(subject_name="Colin")
 ```
 
-### 生物力学数据
+### Biomechanical Data
 ```
-"获取力板的受力和力矩（全局坐标）"
+"Get force plate force and moment (global coordinates)"
 → vicon_get_force_plates()
 
-"获取力板本地坐标数据"
+"Get force plate local coordinate data"
 → vicon_get_force_plates(include_local=true)
 
-"获取眼动仪 1 的注视方向"
+"Get eye tracker 1 gaze direction"
 → vicon_get_eye_tracker(eye_tracker_id=1)
 ```
 
-### 相机和标定
+### Cameras and Calibration
 ```
-"列出所有相机"
+"List all cameras"
 → vicon_get_cameras()
 
-"获取相机 Vantage001 的标定参数"
+"Get calibration parameters for camera Vantage001"
 → vicon_get_camera_calibration(camera_name="Vantage001")
-返回: 全局位姿 + 焦距 + 畸变系数
+Returns: Global pose + focal length + distortion coefficients
 
-"获取相机 1 的质心数据"
+"Get centroid data for camera 1"
 → vicon_get_centroids(camera_name="Vantage 16 (2105980)")
 ```
 
-### 分析和调试
+### Analysis and Debugging
 ```
-"分析系统延迟瓶颈"
+"Analyze system latency bottleneck"
 → vicon_get_latency_samples()
-返回: {采集: 0.001s, 处理: 0.005s, 网络: 0.002s}
+Returns: {acquisition: 0.001s, processing: 0.005s, network: 0.002s}
 
-"获取当前帧的时间码"
+"Get current frame timecode"
 → vicon_get_timecode()
-返回: 01:12:24:02
+Returns: 01:12:24:02
 
-"启用时序日志调试"
+"Enable timing log debugging"
 → vicon_set_timing_log(client_log="timing.log")
 ```
 
 ---
 
-## 🛠️ MCP Tools 完整列表 (36个)
+## 🛠️ Complete MCP Tools List (36)
 
-### 连接 (5)
-| 工具 | 说明 |
-|------|------|
-| `vicon_connect` | TCP 连接 |
-| `vicon_connect_multicast` | 组播连接 |
-| `vicon_start_multicast_transmit` | 开始组播转发 |
-| `vicon_stop_multicast_transmit` | 停止组播转发 |
-| `vicon_set_buffer_size` | 设置缓冲区 |
+### Connection (5)
+| Tool | Description |
+|------|-------------|
+| `vicon_connect` | TCP connection |
+| `vicon_connect_multicast` | Multicast connection |
+| `vicon_start_multicast_transmit` | Start multicast forwarding |
+| `vicon_stop_multicast_transmit` | Stop multicast forwarding |
+| `vicon_set_buffer_size` | Set buffer size |
 
-### 数据配置 (5)
-| 工具 | 说明 |
-|------|------|
-| `vicon_enable_data` | 启用数据类型 |
-| `vicon_disable_data` | 禁用数据类型 |
-| `vicon_check_data_enabled` | 检查启用状态 |
-| `vicon_set_stream_mode` | 设置流模式 |
-| `vicon_get_frame` | 获取帧 |
+### Data Configuration (5)
+| Tool | Description |
+|------|-------------|
+| `vicon_enable_data` | Enable data type |
+| `vicon_disable_data` | Disable data type |
+| `vicon_check_data_enabled` | Check enabled status |
+| `vicon_set_stream_mode` | Set stream mode |
+| `vicon_get_frame` | Get frame |
 
-### 时间和延迟 (4)
-| 工具 | 说明 |
-|------|------|
-| `vicon_get_timecode` | 时间码 |
-| `vicon_get_frame_rates` | 所有帧率 |
-| `vicon_get_latency_total` | 总延迟 |
-| `vicon_get_latency_samples` | 延迟样本 |
+### Time and Latency (4)
+| Tool | Description |
+|------|-------------|
+| `vicon_get_timecode` | Timecode |
+| `vicon_get_frame_rates` | All frame rates |
+| `vicon_get_latency_total` | Total latency |
+| `vicon_get_latency_samples` | Latency samples |
 
-### 主体和段 (5)
-| 工具 | 说明 |
-|------|------|
-| `vicon_get_subjects` | 主体列表 |
-| `vicon_clear_subject_filter` | 清除过滤 |
-| `vicon_add_subject_filter` | 添加过滤 |
-| `vicon_get_segment` | 单段数据（全格式） |
-| `vicon_get_all_segments` | 所有段 |
+### Subjects and Segments (5)
+| Tool | Description |
+|------|-------------|
+| `vicon_get_subjects` | Subject list |
+| `vicon_clear_subject_filter` | Clear filter |
+| `vicon_add_subject_filter` | Add filter |
+| `vicon_get_segment` | Single segment data (full format) |
+| `vicon_get_all_segments` | All segments |
 
-### 标记点 (2)
-| 工具 | 说明 |
-|------|------|
-| `vicon_get_markers` | 标记点（含光线） |
-| `vicon_get_unlabeled_markers` | 未标记点 |
+### Markers (2)
+| Tool | Description |
+|------|-------------|
+| `vicon_get_markers` | Markers (with rays) |
+| `vicon_get_unlabeled_markers` | Unlabeled markers |
 
-### 设备和力板 (4)
-| 工具 | 说明 |
-|------|------|
-| `vicon_get_devices` | 设备列表 |
-| `vicon_set_apex_feedback` | Apex 触觉反馈 |
-| `vicon_get_force_plates` | 力板（全局+本地） |
-| `vicon_get_analog_voltage` | 模拟电压 |
+### Devices and Force Plates (4)
+| Tool | Description |
+|------|-------------|
+| `vicon_get_devices` | Device list |
+| `vicon_set_apex_feedback` | Apex haptic feedback |
+| `vicon_get_force_plates` | Force plates (global + local) |
+| `vicon_get_analog_voltage` | Analog voltage |
 
-### 眼动仪 (2)
-| 工具 | 说明 |
-|------|------|
-| `vicon_get_eye_trackers` | 眼动仪列表 |
-| `vicon_get_eye_tracker` | 位置+注视向量 |
+### Eye Trackers (2)
+| Tool | Description |
+|------|-------------|
+| `vicon_get_eye_trackers` | Eye tracker list |
+| `vicon_get_eye_tracker` | Position + gaze vector |
 
-### 相机 (3)
-| 工具 | 说明 |
-|------|------|
-| `vicon_get_cameras` | 相机列表 |
-| `vicon_get_centroids` | 质心数据 |
-| `vicon_get_camera_calibration` | 标定参数 |
+### Cameras (3)
+| Tool | Description |
+|------|-------------|
+| `vicon_get_cameras` | Camera list |
+| `vicon_get_centroids` | Centroid data |
+| `vicon_get_camera_calibration` | Calibration parameters |
 
-### 坐标系 (3)
-| 工具 | 说明 |
-|------|------|
-| `vicon_set_axis_mapping` | 设置坐标系 |
-| `vicon_get_axis_mapping` | 获取坐标系 |
-| `vicon_get_server_orientation` | 服务器方向 |
+### Coordinate System (3)
+| Tool | Description |
+|------|-------------|
+| `vicon_set_axis_mapping` | Set coordinate system |
+| `vicon_get_axis_mapping` | Get coordinate system |
+| `vicon_get_server_orientation` | Server orientation |
 
-### 调试 (2)
-| 工具 | 说明 |
-|------|------|
-| `vicon_set_timing_log` | 时序日志 |
-| `vicon_configure_wireless` | 无线优化 |
+### Debugging (2)
+| Tool | Description |
+|------|-------------|
+| `vicon_set_timing_log` | Timing log |
+| `vicon_configure_wireless` | Wireless optimization |
 
 ---
 
-## 📡 数据格式示例
+## 📡 Data Format Examples
 
-### 段姿态（完整）
+### Segment Pose (Complete)
 ```json
 {
   "subject": "Colin",
@@ -309,7 +311,7 @@ python vicon_datastream_mcp.py --transport sse --port 8000
     "rotation_helical": {"x": 0.0, "y": 0.1, "z": 0.0, "magnitude": 0.1},
     "occluded": false
   },
-  "local": { /* 相对于父段 */ },
+  "local": { /* Relative to parent segment */ },
   "static": { /* PRE-POSITION/PRE-ORIENTATION */ },
   "hierarchy": {
     "parent": "Hips",
@@ -318,7 +320,7 @@ python vicon_datastream_mcp.py --transport sse --port 8000
 }
 ```
 
-### 力板数据
+### Force Plate Data
 ```json
 {
   "plate_id": 1,
@@ -328,12 +330,12 @@ python vicon_datastream_mcp.py --transport sse --port 8000
     "center_of_pressure": [{"x": 125.0, "y": -45.0, "z": 0.0, "unit": "mm"}]
   },
   "local": {
-    /* 相对于力板自身坐标系 */
+    /* Relative to force plate's own coordinate system */
   }
 }
 ```
 
-### 相机标定
+### Camera Calibration
 ```json
 {
   "camera": "Vantage 16 (2105980)",
@@ -354,11 +356,11 @@ python vicon_datastream_mcp.py --transport sse --port 8000
 
 ---
 
-## 🌐 坐标系快速参考
+## 🌐 Coordinate System Quick Reference
 
-| 软件 | X | Y | Z | 调用 |
-|-----|---|---|---|------|
-| Vicon 默认 | Forward | Left | Up | (默认) |
+| Software | X | Y | Z | Call |
+|----------|---|---|---|------|
+| Vicon Default | Forward | Left | Up | (default) |
 | Unity | Forward | Up | Right | `vicon_set_axis_mapping("Forward", "Up", "Right")` |
 | Unreal | Forward | Right | Up | `vicon_set_axis_mapping("Forward", "Right", "Up")` |
 | ROS | Forward | Left | Up | `vicon_set_axis_mapping("Forward", "Left", "Up")` |
@@ -366,44 +368,50 @@ python vicon_datastream_mcp.py --transport sse --port 8000
 
 ---
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```
 vicon-datastream-mcp/
-├── vicon_datastream_mcp.py    # 主 MCP Server (77KB, 完整实现)
-├── README.md                   # 本文档
-├── requirements.txt            # Python 依赖
-├── CHECKLIST.md                # ✅ 功能完整性检查表
-├── .gitignore
-├── docs/
-│   ├── CONFIG.md               # 配置指南
-│   └── ARCHITECTURE.md         # 架构详解
-└── examples/
-    ├── basic_usage.py          # 基本示例
-    └── ros2_bridge.py          # ROS2 桥接
+├── src/
+│   ├── __init__.py              # Python package init
+│   └── mcp_server.py            # Main MCP Server (81KB, complete implementation)
+├── prompts/                     # Prompt templates
+│   ├── system.txt               # System prompt
+│   └── examples/                # Example prompts
+│       └── basic_usage.txt
+├── docs/                        # Documentation
+│   ├── WINDOWS_SETUP.md         # Windows setup guide
+│   ├── CONFIG.md                # Configuration guide
+│   ├── ARCHITECTURE.md          # Architecture details
+│   └── Vicon DataStream SDK Manual.pdf  # 📚 SDK v1.12.145507h official doc
+├── config.json                  # MCP client configuration
+├── requirements.txt             # Python dependencies
+├── CHECKLIST.md                 # ✅ Feature completeness checklist
+├── README.md                    # This document (English)
+└── README.zh.md                 # Chinese version
 ```
 
 ---
 
-## 🐛 故障排除
+## 🐛 Troubleshooting
 
-### SDK 未找到
+### SDK Not Found
 ```powershell
-# 方法1: 标准安装
+# Method 1: Standard installation
 cd "D:\Program Files\Vicon\DataStream SDK\Win64\Python"
 pip install -e vicon_dssdk
 
-# 方法2: 设置环境变量
+# Method 2: Set environment variable
 $env:VICON_SDK_PATH = "D:\Program Files\Vicon\DataStream SDK\Win64\Python"
 ```
 
-### 连接失败
-1. Vicon Tracker/Nexus/Evoke 是否已启动？
-2. DataStream 是否已启用？（软件设置中）
-3. 防火墙是否阻止端口 801？
+### Connection Failed
+1. Is Vicon Tracker/Nexus/Evoke running?
+2. Is DataStream enabled? (in software settings)
+3. Is firewall blocking port 801?
 
-### 数据为空
-确保调用顺序：
+### Empty Data
+Ensure the correct call sequence:
 1. `vicon_connect()`
 2. `vicon_enable_data("segment")`
 3. `vicon_get_frame()`
@@ -411,12 +419,32 @@ $env:VICON_SDK_PATH = "D:\Program Files\Vicon\DataStream SDK\Win64\Python"
 
 ---
 
-## 📚 相关资源
+## 📚 Related Resources
 
-- [Vicon 官方文档](https://docs.vicon.com/)
-- [MCP 协议规范](https://modelcontextprotocol.io/)
-- SDK 路径: `D:\Program Files\Vicon\DataStream SDK\`
+- [Vicon Official Documentation](https://docs.vicon.com/)
+- [MCP Protocol Specification](https://modelcontextprotocol.io/)
+- SDK Path: `D:\Program Files\Vicon\DataStream SDK\`
+
+---
+
+## 🔬 SDK Information
+
+| Property | Value |
+|----------|-------|
+| **SDK Name** | Vicon DataStream SDK |
+| **SDK Version** | 1.12.145507h |
+| **Protocol** | TCP / Multicast |
+| **Documentation** | [SDK Manual](./docs/Vicon%20DataStream%20SDK%20Manual.pdf) |
+| **License** | Vicon Proprietary |
+
+## Part of ROSClaw
+
+- [rosclaw](https://github.com/ros-claw/rosclaw) — Core framework
+- [vicon-datastream-mcp](https://github.com/ros-claw/vicon-datastream-mcp) — This repo
 
 ---
 
 **Made with precision for motion capture professionals** 🎯
+
+**Generated by ROSClaw SDK-to-MCP Transformer**
+*SDK: Vicon DataStream SDK v1.12.145507h | Protocol: TCP/Multicast*
