@@ -18,7 +18,7 @@ Vicon DataStream MCP Server
 - 时间码获取
 
 运行方式:
-    python vicon_datastream_mcp.py [--transport stdio|sse] [--port 8000]
+    python src/mcp_server.py [--transport stdio|sse] [--port 8000]
 
 环境变量:
     VICON_HOST: 默认 Vicon Server 地址 (默认: localhost:801)
@@ -27,7 +27,7 @@ Vicon DataStream MCP Server
     pip install mcp vicon_dssdk
 
 作者: AI Assistant
-版本: 2.0.0 (完整版)
+版本: 1.0.0
 """
 
 import asyncio
@@ -1583,7 +1583,7 @@ def _get_mcp_server_and_init_options():
 
     return server, InitializationOptions(
         server_name="vicon_datastream",
-        server_version="2.0.0",
+        server_version="1.0.0",
         capabilities=server.get_capabilities(
             notification_options=NotificationOptions(),
             experimental_capabilities={},
@@ -2162,15 +2162,15 @@ def main():
     import argparse
     
     parser = argparse.ArgumentParser(
-        description="Vicon DataStream MCP Server v2.0.0 - 完整功能版",
+        description="Vicon DataStream MCP Server v1.0.0",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
     # stdio 模式（默认，用于 OpenClaw/Claude Desktop）
-    python vicon_datastream_mcp.py
-    
+    python src/mcp_server.py
+
     # SSE 模式（用于 Web 客户端）
-    python vicon_datastream_mcp.py --transport sse --port 8000
+    python src/mcp_server.py --transport sse --port 8000
 
 自然语言示例:
     "连接到 Vicon 系统"
@@ -2196,12 +2196,12 @@ def main():
     parser.add_argument(
         "--version",
         action="version",
-        version="%(prog)s 2.0.0"
+        version="%(prog)s 1.0.0"
     )
     
     args = parser.parse_args()
     
-    logger.info(f"🚀 启动 Vicon DataStream MCP Server v2.0.0")
+    logger.info(f"🚀 启动 Vicon DataStream MCP Server v1.0.0")
     logger.info(f"   传输模式: {args.transport}")
     logger.info(f"   SDK 可用: {VICON_SDK_AVAILABLE}")
     
