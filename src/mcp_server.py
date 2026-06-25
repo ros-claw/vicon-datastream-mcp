@@ -45,6 +45,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.server.sse import SseServerTransport
 from mcp.types import TextContent
 from mcp.server.models import InitializationOptions
+from anyio import ClosedResourceError
 
 # =============================================================================
 # SDK 导入处理
@@ -52,7 +53,6 @@ from mcp.server.models import InitializationOptions
 
 VICON_SDK_AVAILABLE = False
 ViconDataStream = None
-CoreClient = None
 
 SDK_PATHS = [
     # 标准安装路径
@@ -67,7 +67,6 @@ SDK_PATHS = [
 # 尝试导入
 try:
     from vicon_dssdk import ViconDataStream
-    from vicon_dssdk import CoreClient
     VICON_SDK_AVAILABLE = True
 except ImportError:
     for sdk_path in SDK_PATHS:
@@ -75,7 +74,6 @@ except ImportError:
             sys.path.insert(0, str(sdk_path))
             try:
                 from vicon_dssdk import ViconDataStream
-                from vicon_dssdk import CoreClient
                 VICON_SDK_AVAILABLE = True
                 break
             except ImportError:
@@ -83,7 +81,7 @@ except ImportError:
 
 if not VICON_SDK_AVAILABLE:
     print("⚠️ 警告: 无法加载 Vicon DataStream SDK。将使用模拟模式运行。", file=sys.stderr)
-    print("   请安装 SDK: cd 'D:\Program Files\Vicon\DataStream SDK\Win64\Python' && pip install -e vicon_dssdk", file=sys.stderr)
+    print(r"   请安装 SDK: cd 'D:\Program Files\Vicon\DataStream SDK\Win64\Python' && pip install -e vicon_dssdk", file=sys.stderr)
 
 
 # =============================================================================
@@ -635,10 +633,13 @@ class ViconClientWrapper:
                 None, self.conn.client.GetSegmentChildren,
                 subject_name, segment_name
             )
-            parent = await loop.run_in_executor(
-                None, self.conn.client.GetSegmentParentName,
-                subject_name, segment_name
-            )
+            try:
+                parent = await loop.run_in_executor(
+                    None, self.conn.client.GetSegmentParentName,
+                    subject_name, segment_name
+                )
+            except Exception:
+                parent = ""
             
             # 全局变换
             global_trans, global_occ = await loop.run_in_executor(
@@ -703,26 +704,42 @@ class ViconClientWrapper:
             except:
                 local_helical = None
             
-            # 静态偏移
-            static_trans = await loop.run_in_executor(
-                None, self.conn.client.GetSegmentStaticTranslation,
-                subject_name, segment_name
-            )
+            # Static offsets are optional for some segment types/models.
+            try:
+                static_trans = await loop.run_in_executor(
+                    None, self.conn.client.GetSegmentStaticTranslation,
+                    subject_name, segment_name
+                )
+            except Exception:
+                static_trans = (0.0, 0.0, 0.0)
             
-            static_euler = await loop.run_in_executor(
-                None, self.conn.client.GetSegmentStaticRotationEulerXYZ,
-                subject_name, segment_name
-            )
+            try:
+                static_euler = await loop.run_in_executor(
+                    None, self.conn.client.GetSegmentStaticRotationEulerXYZ,
+                    subject_name, segment_name
+                )
+            except Exception:
+                static_euler = (0.0, 0.0, 0.0)
             
-            static_quat = await loop.run_in_executor(
-                None, self.conn.client.GetSegmentStaticRotationQuaternion,
-                subject_name, segment_name
-            )
+            try:
+                static_quat = await loop.run_in_executor(
+                    None, self.conn.client.GetSegmentStaticRotationQuaternion,
+                    subject_name, segment_name
+                )
+            except Exception:
+                static_quat = (0.0, 0.0, 0.0, 1.0)
             
-            static_matrix = await loop.run_in_executor(
-                None, self.conn.client.GetSegmentStaticRotationMatrix,
-                subject_name, segment_name
-            )
+            try:
+                static_matrix = await loop.run_in_executor(
+                    None, self.conn.client.GetSegmentStaticRotationMatrix,
+                    subject_name, segment_name
+                )
+            except Exception:
+                static_matrix = (
+                    (1.0, 0.0, 0.0),
+                    (0.0, 1.0, 0.0),
+                    (0.0, 0.0, 1.0),
+                )
             
             try:
                 static_helical = await loop.run_in_executor(
@@ -1556,6 +1573,24 @@ vicon = ViconClientWrapper()
 mcp = FastMCP("vicon_datastream")
 
 
+def _get_mcp_server_and_init_options():
+    """Return the low-level MCP server and compatible initialization options."""
+    server = getattr(mcp, "_mcp_server", mcp)
+    if hasattr(server, "create_initialization_options"):
+        return server, server.create_initialization_options()
+
+    from mcp.server.lowlevel import NotificationOptions
+
+    return server, InitializationOptions(
+        server_name="vicon_datastream",
+        server_version="2.0.0",
+        capabilities=server.get_capabilities(
+            notification_options=NotificationOptions(),
+            experimental_capabilities={},
+        ),
+    )
+
+
 # -----------------------------------------------------------------------------
 # Tools - 连接管理
 # -----------------------------------------------------------------------------
@@ -2081,15 +2116,8 @@ async def run_stdio():
     from mcp.server.stdio import stdio_server
     
     async with stdio_server() as (read_stream, write_stream):
-        await mcp.run(
-            read_stream,
-            write_stream,
-            InitializationOptions(
-                server_name="vicon_datastream",
-                server_version="2.0.0",
-                capabilities=mcp.get_capabilities()
-            )
-        )
+        server, init_options = _get_mcp_server_and_init_options()
+        await server.run(read_stream, write_stream, init_options)
 
 
 async def run_sse(port: int = 8000):
@@ -2100,28 +2128,27 @@ async def run_sse(port: int = 8000):
     
     sse = SseServerTransport("/messages/")
     
-    async def handle_sse(request):
-        async with sse.connect_sse(
-            request.scope, request.receive, request._send
-        ) as (read_stream, write_stream):
-            await mcp.run(
+    class SSEEndpoint:
+        async def __call__(self, scope, receive, send):
+            async with sse.connect_sse(scope, receive, send) as (
                 read_stream,
                 write_stream,
-                InitializationOptions(
-                    server_name="vicon_datastream",
-                    server_version="2.0.0",
-                    capabilities=mcp.get_capabilities()
-                )
-            )
+            ):
+                server, init_options = _get_mcp_server_and_init_options()
+                await server.run(read_stream, write_stream, init_options)
     
-    async def handle_messages(request):
-        await sse.handle_post_message(request.scope, request.receive, request._send)
+    class MessageEndpoint:
+        async def __call__(self, scope, receive, send):
+            try:
+                await sse.handle_post_message(scope, receive, send)
+            except ClosedResourceError:
+                logger.warning("SSE session closed before POST message could be delivered")
     
     starlette_app = Starlette(
         debug=True,
         routes=[
-            Route("/sse", endpoint=handle_sse),
-            Route("/messages/", endpoint=handle_messages, methods=["POST"]),
+            Route("/sse", endpoint=SSEEndpoint()),
+            Route("/messages/", endpoint=MessageEndpoint(), methods=["POST"]),
         ],
     )
     
